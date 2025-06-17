@@ -1,51 +1,37 @@
-# 📦 Sentari Kit
+## 1. How do you detect actionable intent?
+I detect actionable intent by looking for imperative verb phrases that signal a user’s intent to do something. For example, entries like “Call grandma,” “Buy groceries,” or “Book a dentist appointment” start with a command-like verb and are typically short, direct, and task-oriented.
 
-This folder contains **everything** a candidate needs to complete an interview task.
+Key signals:
 
-Tech stack:
-Next.js 15 (App Router, React Server Components)
-React 19
-TypeScript
-Tailwind CSS 3 
-Supabase
+Imperative verbs (e.g., call, buy, fix, send)
 
-Structure:
-```
-contrib/
- ├─ README.md                # you are here
- ├─ template/                # minimal repo candidates will fork
- └─ scripts/
-     └─ verify-contrib.sh    # maintainer helper to check a submission
-```
+Verb + object patterns (e.g., "text John", "walk the dog")
 
-Read `template/README.md` for the instructions you will send to candidates.
+Temporal cues like “tomorrow,” “next week,” or specific times help extract due dates.
 
-## Folder structure
+This approach mirrors how voice assistants and productivity apps parse commands—focusing on action-first language.
 
-```
-contrib/
- ├─ README.md                # this guide
- ├─ template/                # minimal project template for contributors
- │   ├─ src/
- │   │   ├─ lib/
- │   │   │   └─ sampleService.ts
- │   │   └─ app/api/sample/route.ts
- │   ├─ tests/
- │   │   └─ sample.test.ts
- │   ├─ package.json         # locked dependency versions
- │   ├─ tsconfig.json
- │   └─ .eslintrc.json
- └─ scripts/
-     └─ verify-contrib.sh    # one-liner acceptance script for maintainers
-```
+## 2. Why this structure?
+I structured each extracted task with the following fields:
 
-## Quick workflow overview
+task_text: the raw instruction or sentence
 
-1. A contributor **forks** the `template/` repo (or clicks *Use this template* on GitHub).  
-2. They implement their feature following `template/README.md` and make sure `pnpm lint && pnpm test` are both green.  
-3. They generate a `patch.diff` or simply share the repository URL in the designated Issue.  
-4. You run `scripts/verify-contrib.sh <repo-url>` to clone the repo and execute the automated checks offline.  
-5. If it passes and looks valuable, you manually cherry-pick / copy the code into the main code-base.
+due_date: extracted using temporal phrases (if available)
 
-> Important: everything lives under the `contrib/` sub-directory 
+status: defaulted to pending
+
+category: inferred from keywords (e.g., “doctor” → health, “buy” → errand)
+
+This schema is clean, flexible, and extensible. It supports both user-facing features (like reminders or daily planning) and backend features (like tagging, filtering, and summarization). It also aligns well with existing productivity tools and Supabase schema design.
+
+## 3. How would this integrate into reminders or summaries?
+This structured output enables seamless integration into:
+
+Reminders: Each task with a due_date can trigger push notifications or be added to a calendar.
+
+Summaries: Users can receive daily or weekly overviews (e.g., “You have 3 upcoming tasks this week in categories: health, errands, and home.”)
+
+AI Coaching: Tasks can be prioritized or bundled (e.g., “You mentioned booking a dentist—shall I help you find one nearby?”)
+
+By turning unstructured voice notes into structured data, Sentari can become not just a journal but a proactive assistant that supports well-being, planning, and follow-through.
 
