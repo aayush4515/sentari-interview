@@ -25,7 +25,15 @@ export interface VoiceEntry {
   idea_status?: string | null;
 }
 
+export interface Task {
+  task_text: string;
+  due_date?: string;
+  category?: string;
+  status: "pending";
+}
+
 export interface ProcessedResult {
   summary: string;
   tagFrequencies: Record<string, number>;
+  tasks: Task[];
 } 
